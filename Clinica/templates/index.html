@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clínica Veterinaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-white">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-paw text-3xl text-blue-600"></i>
+            <h1 class="text-2xl font-bold text-gray-800">Clinica Animal</h1>
+          </div>
+
+          <nav class="hidden md:flex space-x-8">
+            <a
+              href="{% url 'inicio'%}"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >Inicio</a
+            >
+            <a
+              href="{% url 'agregar_propietario' %}"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >Registrar Propietario</a
+            >
+            <a
+              href="{% url 'agendar_citas' %}"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >Crear Cita</a
+            >
+            <a
+              href="{% url 'propietarios_lista' %}"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >Propietarios</a
+            >
+          </nav>
+
+          <!-- Mobile menu button -->
+          <button class="md:hidden text-gray-700">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    {% block content %} {% endblock %}
+
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+    </script>
+  </body>
+  {% block scripts %} {% endblock %}
+</html>

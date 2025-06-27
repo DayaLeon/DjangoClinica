@@ -1,0 +1,210 @@
+{% extends "index.html" %} {% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-semibold text-gray-700">Editar Propietario</h2>
+    <p class="text-gray-600 mt-2">
+      Actualiza la información de {{ propietario.nombre }}
+    </p>
+  </div>
+
+  <!-- Formulario -->
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <!-- Mostrar mensajes de éxito/error -->
+      {% if messages %} {% for message in messages %}
+      <div
+        class="mb-6 p-4 rounded-lg {% if message.tags == 'success' %}bg-green-50 border border-green-200 text-green-700{% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% endif %}"
+      >
+        <div class="flex items-center">
+          {% if message.tags == 'success' %}
+          <i class="fas fa-check-circle mr-2"></i>
+          {% elif message.tags == 'error' %}
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {% endif %} {{ message }}
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+
+      <!-- Información actual -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+          <h3 class="font-semibold text-blue-800">Información Actual</h3>
+        </div>
+        <div class="text-blue-700 text-sm space-y-1">
+          <p><strong>Nombre:</strong> {{ propietario.nombre }}</p>
+          <p><strong>Teléfono:</strong> {{ propietario.telefono }}</p>
+          <p><strong>Dirección:</strong> {{ propietario.direccion }}</p>
+        </div>
+      </div>
+
+      <form method="post" class="space-y-6" novalidate>
+        {% csrf_token %}
+
+        <!-- Mostrar errores generales del formulario -->
+        {% if form.non_field_errors %}
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+            <span class="text-red-700 font-medium">Error en el formulario</span>
+          </div>
+          <ul class="mt-2 text-red-600 text-sm">
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <!-- Campo Nombre -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.nombre.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-user text-blue-600 mr-2"></i>
+            {{ form.nombre.label }}
+            <span class="text-red-500">*</span>
+          </label>
+          {{ form.nombre }} {% if form.nombre.errors %}
+          <div class="text-red-600 text-sm mt-1">
+            {% for error in form.nombre.errors %}
+            <p class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Campo Teléfono -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.telefono.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-phone text-blue-600 mr-2"></i>
+            {{ form.telefono.label }}
+            <span class="text-red-500">*</span>
+          </label>
+          {{ form.telefono }} {% if form.telefono.errors %}
+          <div class="text-red-600 text-sm mt-1">
+            {% for error in form.telefono.errors %}
+            <p class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Campo Dirección -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.direccion.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-map-marker-alt text-blue-600 mr-2"></i>
+            {{ form.direccion.label }}
+            <span class="text-red-500">*</span>
+          </label>
+          {{ form.direccion }} {% if form.direccion.errors %}
+          <div class="text-red-600 text-sm mt-1">
+            {% for error in form.direccion.errors %}
+            <p class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <h3>Animales del Propietario</h3>
+        {{ formset.management_form }}
+        {% for form in formset %}
+        <div class="animal-form bg-gray-100 p-4 my-2 rounded">
+          {{ form.as_p }} {% if form.instance.pk %}
+          <p><strong>Animal ID:</strong> {{ form.instance.id }}</p>
+          <a
+            href="{% url 'historial_citas' form.instance.id %}"
+            class="inline-block mt-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+          >
+            Ver Historial de Citas
+          </a>
+          {% else %}
+          <p class="text-gray-500">Nuevo Animal (aún no guardado)</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <!-- Botones -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+          <button
+            type="submit"
+            class="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 focus:ring-4 focus:ring-green-200 transition-all duration-200 flex items-center justify-center"
+          >
+            <i class="fas fa-save mr-2"></i>
+            Guardar Cambios
+          </button>
+          <a
+            href="{% url 'propietarios_lista' %}"
+            class="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 focus:ring-4 focus:ring-gray-200 transition-all duration-200 flex items-center justify-center"
+          >
+            <i class="fas fa-times mr-2"></i>
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Formatear teléfono mientras se escribe
+    const telefonoInput = document.querySelector('input[name="telefono"]');
+    if (telefonoInput) {
+      telefonoInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length >= 10) {
+          if (value.length === 10) {
+            value = value.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+          } else if (value.length === 11 && value.startsWith("1")) {
+            value = value.replace(
+              /(\d{1})(\d{3})(\d{3})(\d{4})/,
+              "+$1 ($2) $3-$4"
+            );
+          }
+        }
+
+        e.target.value = value;
+      });
+    }
+
+    // Capitalizar nombre mientras se escribe
+    const nombreInput = document.querySelector('input[name="nombre"]');
+    if (nombreInput) {
+      nombreInput.addEventListener("blur", function (e) {
+        e.target.value = e.target.value
+          .toLowerCase()
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+      });
+    }
+
+    // Capitalizar dirección mientras se escribe
+    const direccionInput = document.querySelector('input[name="direccion"]');
+    if (direccionInput) {
+      direccionInput.addEventListener("blur", function (e) {
+        e.target.value = e.target.value
+          .toLowerCase()
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+      });
+    }
+  });
+</script>
+{% endblock scripts %}

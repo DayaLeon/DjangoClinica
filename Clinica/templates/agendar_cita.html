@@ -1,0 +1,249 @@
+{% extends 'index.html' %} {% block content %} {% load static %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-semibold text-gray-700">Agendar Nueva Cita</h2>
+    <p class="text-gray-600 mt-2">
+      Completa el formulario para agendar una cita para tu mascota
+    </p>
+  </div>
+
+  <!-- Formulario -->
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Mostrar errores generales del formulario -->
+        {% if form.non_field_errors %}
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+            <span class="text-red-700 font-medium">Error en el formulario</span>
+          </div>
+          <ul class="mt-2 text-red-600 text-sm">
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <!-- Campo Propietario -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.propietario.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-user text-blue-600 mr-2"></i>
+            {{ form.propietario.label }}
+          </label>
+          {{ form.propietario }}
+        </div>
+
+        <!-- Campo Animal -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.animal.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-paw text-blue-600 mr-2"></i>
+            {{ form.animal.label }}
+          </label>
+          {{ form.animal }} {% if form.animal.errors %}
+          <div class="text-red-600 text-sm mt-1">
+            {% for error in form.animal.errors %}
+            <p class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Campos Fecha y Hora en Grid -->
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Campo Fecha -->
+          <div class="space-y-2">
+            <label
+              for="{{ form.fecha.id_for_label }}"
+              class="block text-sm font-semibold text-gray-700"
+            >
+              <i class="fas fa-calendar text-blue-600 mr-2"></i>
+              {{ form.fecha.label }}
+            </label>
+            {{ form.fecha }} {% if form.fecha.errors %}
+            <div class="text-red-600 text-sm mt-1">
+              {% for error in form.fecha.errors %}
+              <p class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ error }}
+              </p>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Campo Hora -->
+          <div class="space-y-2">
+            <label
+              for="{{ form.hora.id_for_label }}"
+              class="block text-sm font-semibold text-gray-700"
+            >
+              <i class="fas fa-clock text-blue-600 mr-2"></i>
+              {{ form.hora.label }}
+            </label>
+            {{ form.hora }} {% if form.hora.errors %}
+            <div class="text-red-600 text-sm mt-1">
+              {% for error in form.hora.errors %}
+              <p class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ error }}
+              </p>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Campo Motivo -->
+        <div class="space-y-2">
+          <label
+            for="{{ form.motivo.id_for_label }}"
+            class="block text-sm font-semibold text-gray-700"
+          >
+            <i class="fas fa-notes-medical text-blue-600 mr-2"></i>
+            {{ form.motivo.label }}
+          </label>
+          {{ form.motivo }} {% if form.motivo.errors %}
+          <div class="text-red-600 text-sm mt-1">
+            {% for error in form.motivo.errors %}
+            <p class="flex items-center">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <p class="text-gray-500 text-sm">
+            <i class="fas fa-info-circle mr-1"></i>
+            Describe brevemente el motivo de la consulta para preparar mejor la
+            cita
+          </p>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div class="flex items-start">
+            <i class="fas fa-info-circle text-blue-600 mt-1 mr-3"></i>
+            <div class="text-blue-800">
+              <h4 class="font-semibold mb-2">Información importante:</h4>
+              <ul class="text-sm space-y-1">
+                <li>• Las citas se confirman por teléfono</li>
+                <li>• Llega 15 minutos antes de tu cita</li>
+                <li>• Trae el carnet de vacunación de tu mascota</li>
+                <li>• Para emergencias llama al (123) 456-7890</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+          <button
+            type="submit"
+            class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 flex items-center justify-center"
+          >
+            <i class="fas fa-calendar-plus mr-2"></i>
+            Agendar Cita
+          </button>
+          <a
+            href="{% url 'inicio' %}"
+            class="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 focus:ring-4 focus:ring-gray-200 transition-all duration-200 flex items-center justify-center"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            Volver al Inicio
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Información de contacto -->
+    <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-phone text-green-600 mr-2"></i>
+        ¿Necesitas ayuda?
+      </h3>
+      <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+        <div class="flex items-center">
+          <i class="fas fa-phone text-blue-600 mr-2"></i>
+          <span>Teléfono: (123) 456-7890</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-envelope text-blue-600 mr-2"></i>
+          <span>Email: info@vetcare.com</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-clock text-blue-600 mr-2"></i>
+          <span>Lun-Vie: 8:00-18:00</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-blue-600 mr-2"></i>
+          <span>Av. Principal 123, Ciudad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para mejorar la experiencia del usuario -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const propietarioSelect = document.getElementById("id_propietario");
+    const animalSelect = document.getElementById("id_animal");
+
+    propietarioSelect.addEventListener("change", function () {
+      const propietarioId = this.value;
+      fetch(`/cargar-animales/?propietario=${propietarioId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          animalSelect.innerHTML = "";
+          data.forEach((animal) => {
+            const option = document.createElement("option");
+            option.value = animal.id;
+            option.textContent = animal.nombre_animal;
+            animalSelect.appendChild(option);
+          });
+        });
+    });
+  });
+</script>
+
+<script>
+  // Establecer fecha mínima como hoy
+  document.addEventListener("DOMContentLoaded", function () {
+    const fechaInput = document.querySelector('input[type="date"]');
+    if (fechaInput) {
+      const today = new Date().toISOString().split("T")[0];
+      fechaInput.setAttribute("min", today);
+    }
+
+    // Validación de hora de trabajo
+    const horaInput = document.querySelector('input[type="time"]');
+    if (horaInput) {
+      horaInput.addEventListener("change", function () {
+        const hora = this.value;
+        const [horas, minutos] = hora.split(":").map(Number);
+        const totalMinutos = horas * 60 + minutos;
+
+        // Horario de trabajo: 8:00 - 18:00
+        if (totalMinutos < 480 || totalMinutos > 1080) {
+          alert("Por favor selecciona una hora entre 8:00 AM y 6:00 PM");
+          this.value = "";
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

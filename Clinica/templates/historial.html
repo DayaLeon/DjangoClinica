@@ -1,0 +1,86 @@
+<!-- Versión más simple si prefieres menos elementos -->
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header simplificado -->
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-history text-blue-600 mr-3"></i>
+            Historial de Citas
+        </h2>
+        <p class="text-xl text-gray-600">{{ animal.nombre_animal }}</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+        {% if citas %}
+            <!-- Lista de citas simplificada -->
+            <div class="space-y-4">
+                {% for cita in citas %}
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-4 mb-3">
+                                    <div class="bg-blue-100 p-2 rounded-full">
+                                        <i class="fas fa-calendar text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">
+                                            {{ cita.fecha|date:"d/m/Y" }} - {{ cita.hora|time:"H:i" }}
+                                        </h3>
+                                        <p class="text-gray-600">{{ cita.fecha|date:"l, F j, Y" }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="ml-12">
+                                    <p class="text-gray-700">
+                                        <i class="fas fa-notes-medical text-green-600 mr-2"></i>
+                                        <strong>Motivo:</strong> {{ cita.motivo }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 md:mt-0">
+                                {% if cita.fecha >= today %}
+                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        Próxima
+                                    </span>
+                                {% else %}
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        Completada
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Estado vacío -->
+            <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+                <i class="fas fa-calendar-times text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay citas registradas</h3>
+                <p class="text-gray-500 mb-6">{{ animal.nombre_animal }} no tiene citas en el historial</p>
+            </div>
+        {% endif %}
+
+        <!-- Botones de acción -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'agendar_citas' %}" 
+               class="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center">
+                <i class="fas fa-calendar-plus mr-2"></i>
+                Nueva Cita
+            </a>
+            
+            <a href="{% url 'propietarios_lista' %}" 
+               class="bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600 transition-colors flex items-center justify-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Volver
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}
